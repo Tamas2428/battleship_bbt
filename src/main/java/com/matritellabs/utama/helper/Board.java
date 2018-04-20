@@ -10,6 +10,15 @@ public abstract class Board {
         nameOfThePlayer = inputNameOfThePlayer;
     }
 
+    //hit target method
+    public void hitTheTarget(int rowNumber, int coloumnNumber){
+        if(enemyBoard.get(rowNumber-1).get(coloumnNumber-1) == )
+                enemyBoard.get(rowNumber-1).set(coloumnNumber-1, "X");
+    }
+
+    //put ships on the board
+    public void putShipOnBoard(int startRow, )
+
     //bence - create new board
     public void boardBuilder( int inputlistSize) {
 
@@ -49,12 +58,12 @@ public abstract class Board {
     public void clearBoard() {
         for ( int i = 0; i < myBoard.size(); i++ ) {
             for ( int j = 0; j < myBoard.get(0).size(); j++ ) {
-                myBoard.get(i).set(j, "-");
+                myBoard.get(i).set(j, "0");
             }
         }
         for ( int i = 0; i < enemyBoard.size(); i++ ) {
             for ( int j = 0; j < enemyBoard.get(0).size(); j++ ) {
-                enemyBoard.get(i).set(j, "-");
+                enemyBoard.get(i).set(j, "0");
             }
         }
     }
