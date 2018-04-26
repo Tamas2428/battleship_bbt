@@ -4,7 +4,7 @@ import java.util.*;
 public abstract class Ship {
     private int hitPoints;
     private int size;
-    //private List<String> listOfCoordinates; - NEM KELL | LEHET, HOGY KELL
+    private List<Integer> listOfCoordinates;
 
     public int getHitPoints() {
         return hitPoints;
@@ -20,6 +20,14 @@ public abstract class Ship {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public List<Integer> getListOfCoordinates() {
+        return listOfCoordinates;
+    }
+
+    public void setListOfCoordinates(List<Integer> listOfCoordinates) {
+        this.listOfCoordinates = listOfCoordinates;
     }
 
 }
