@@ -4,7 +4,7 @@ import java.util.*;
 public abstract class Ship {
     private int hitPoints;
     private int size;
-    private List<String> listOfCoordinates;
+    private List<Integer> listOfCoordinates;
 
     public int getHitPoints() {
         return hitPoints;
@@ -22,11 +22,12 @@ public abstract class Ship {
         this.size = size;
     }
 
-    public List<String> getListOfCoordinates() {
+    public List<Integer> getListOfCoordinates() {
         return listOfCoordinates;
     }
 
-    public void setListOfCoordinates(List<String> listOfCoordinates) {
+    public void setListOfCoordinates(List<Integer> listOfCoordinates) {
         this.listOfCoordinates = listOfCoordinates;
     }
+
 }
