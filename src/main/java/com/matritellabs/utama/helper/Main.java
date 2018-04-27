@@ -8,7 +8,13 @@ public class Main {
         myPB1Board.hitTheTarget(3,4);
         System.out.println(myPB1Board.getEnemyBoard());
 
-        myPB1Board.setShips(2,5,hajoka,"down");
+        Battleship hajoka = new Battleship();
+        Battleship hajoka2 = new Battleship();
+
+
+        myPB1Board.setShips(5,7,hajoka,"up");
+        myPB1Board.setShips(8,7,hajoka2,"up");
+
 
         myPB1Board.boardPrinter();
     }
