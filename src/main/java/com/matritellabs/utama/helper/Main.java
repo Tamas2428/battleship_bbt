@@ -21,17 +21,17 @@ public class Main {
         List<String> listOfShips2 = new ArrayList<>();
 
 
-        listOfShips.add("carrier");
-        listOfShips.add("cruiser");
+//        listOfShips.add("carrier");
+//        listOfShips.add("cruiser");
         listOfShips.add("destroyer");
-        listOfShips.add("submarine");
-        listOfShips.add("battleship");
+//        listOfShips.add("submarine");
+//        listOfShips.add("battleship");
 
-        listOfShips2.add("carrier");
-        listOfShips2.add("cruiser");
+//        listOfShips2.add("carrier");
+//        listOfShips2.add("cruiser");
         listOfShips2.add("destroyer");
-        listOfShips2.add("submarine");
-        listOfShips2.add("battleship");
+//        listOfShips2.add("submarine");
+//        listOfShips2.add("battleship");
 
         System.out.println(" ");
         LineByLineReader lblReader = new LineByLineReader();

@@ -26,6 +26,10 @@ public abstract class Board {
             if (enemyBoard.get(rowNumber).get(columnNumber).equals("O")) {
                 thrown = false;
             }
+            if (enemyBoard.get(rowNumber).get(columnNumber).equals("X") || enemyBoard.get(rowNumber).get(columnNumber).equals("*")){
+                System.out.println("You already shot there.");
+                thrown = true;
+            }
         } catch (IndexOutOfBoundsException | NumberFormatException ioobe) {
             thrown = true;
         }
