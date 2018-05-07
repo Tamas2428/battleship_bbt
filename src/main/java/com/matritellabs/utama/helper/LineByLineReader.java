@@ -9,6 +9,7 @@ public class LineByLineReader {
     private BufferedReader myReader;
 
     public LineByLineReader() {
+
         myReader = new BufferedReader(new InputStreamReader(System.in));
     }
 

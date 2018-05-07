@@ -1,5 +1,8 @@
 package com.matritellabs.utama.helper;
 
+import sun.security.krb5.internal.crypto.Des;
+
+import java.io.IOException;
 import java.util.*;
 
 public abstract class Board {
@@ -7,24 +10,79 @@ public abstract class Board {
     private List<List<String>> enemyBoard = new ArrayList<List<String>>();
     private String nameOfThePlayer;
 
+
     public Board(String inputNameOfThePlayer) {
         nameOfThePlayer = inputNameOfThePlayer;
     }
 
     //hit target method
-    public void hitTheTarget(int rowNumber, int coloumnNumber) {
-        if (enemyBoard.get(rowNumber - 1).get(coloumnNumber - 1) == "0")
-            enemyBoard.get(rowNumber - 1).set(coloumnNumber - 1, "X");
+    public boolean hitTheTarget(String srowNumber, int columnNumber, List<List<String>> enemyBoard, List<List<String>> myenemyBoard, List<List<String>> otherPlayerBoard) {
+
+        boolean thrown = false;
+        int rowNumber = rowTranslater(srowNumber);
+        rowNumber = rowNumber - 1;
+        columnNumber = columnNumber - 1;
+        try {
+            if (enemyBoard.get(rowNumber).get(columnNumber).equals("O")) {
+                thrown = false;
+            }
+        } catch (IndexOutOfBoundsException | NumberFormatException ioobe) {
+            thrown = true;
+        }
+        if (!thrown) {
+            if (enemyBoard.get(rowNumber).get(columnNumber).equals("O")) {
+                myenemyBoard.get(rowNumber).set(columnNumber, "X");
+                otherPlayerBoard.get(rowNumber).set(columnNumber, "X");
+            } else {
+                myenemyBoard.get(rowNumber).set(columnNumber, "*");
+            }
+        } else if (thrown) {
+            System.out.println("Choose an other coordinate.");
+            System.out.println(" ");
+        }
+        return thrown;
+    }
+
+    public boolean checkEndOfGame(List<List<String>> myBoard, List<List<String>> enemyBoard) {
+        boolean continueGame = false;
+//        boolean continueGameForEnemy = false;
+        int containsShipForP1 = 0;
+        int containsShipForP2 = 4;
+
+        for (List key : myBoard) {
+            if (key.contains("O")) {
+                continueGame = true;
+                containsShipForP1 = 1;
+            }
+        }
+        if (containsShipForP1 == 0) {
+            System.out.println("Player 2 won. Congratulations!");
+            continueGame = false;
+        }
+
+        if (continueGame) {
+            for (List key : enemyBoard) {
+                if (key.contains("O")) {
+                    continueGame = true;
+                    containsShipForP2 = 2;
+                }
+            }
+        }
+
+        if (containsShipForP2 == 4 && continueGame) {
+            System.out.println("Player 1 won. Congratulations!");
+            continueGame = false;
+        }
+        return continueGame;
     }
 
 
-    //bence - create new board
     public void boardBuilder(int inputlistSize) {
 
         for (int i = 0; i < inputlistSize; i++) {
-            myBoard.add(new ArrayList<String>());
+            this.myBoard.add(new ArrayList<String>());
             for (int j = 0; j < inputlistSize; j++) {
-                myBoard.get(i).add("~");
+                this.myBoard.get(i).add("~");
             }
         }
         for (int i = 0; i < inputlistSize; i++) {
@@ -35,71 +93,113 @@ public abstract class Board {
         }
     }
 
+    public static int rowTranslater(String x) {
 
-    //benyo - create new board
-//    public void createNewBoard(int sizeOfTheBoard) {
-//        ArrayList<String> singleList = new ArrayList<String>();
-//        for (int i = 0; i < sizeOfTheBoard ; i++) {
-//            singleList.add("~");
-//        }
-//        for (int i = 0; i < sizeOfTheBoard ; i++) {
-//            myBoard.add(singleList);
-//        }
-//        for (int i = 0; i < sizeOfTheBoard ; i++) {
-//            enemyBoard.add(singleList);
-//        }
-//
-//    }
+        switch (x) {
 
-
-    //saját - clear board method
-    public void clearBoard() {
-        for (int i = 0; i < myBoard.size(); i++) {
-            for (int j = 0; j < myBoard.get(0).size(); j++) {
-                myBoard.get(i).set(j, "0");
-            }
-        }
-        for (int i = 0; i < enemyBoard.size(); i++) {
-            for (int j = 0; j < enemyBoard.get(0).size(); j++) {
-                enemyBoard.get(i).set(j, "0");
-            }
+            case "a":
+                return 1;
+            case "b":
+                return 2;
+            case "c":
+                return 3;
+            case "d":
+                return 4;
+            case "e":
+                return 5;
+            case "f":
+                return 6;
+            case "g":
+                return 7;
+            case "h":
+                return 8;
+            case "i":
+                return 9;
+            case "j":
+                return 10;
+            default:
+                return 0;
         }
     }
 
-    //Bence - board printer method
     public void boardPrinter() {
         System.out.println("This is your board");
-        for (int i = 0; i < myBoard.size(); i++) {
+        System.out.print(" ");
+        for (int i = 0; i < this.myBoard.size(); i++) {
+            System.out.print(" " + (i + 1));
+        }
+        for (int i = 0; i < this.myBoard.size(); i++) {
             System.out.println();
-            for (int j = 0; j < myBoard.get(0).size(); j++) {
-                System.out.print(" " + myBoard.get(i).get(j));
+            System.out.print((char) ('A' + i));
+            for (int j = 0; j < this.myBoard.get(0).size(); j++) {
+                System.out.print(" " + this.myBoard.get(i).get(j));
             }
         }
+
         System.out.println();
-        System.out.println("\n This is the enemys board");
+        System.out.println("\n This is the enemy's board");
+        System.out.print(" ");
+        for (int i = 0; i < this.myBoard.size(); i++) {
+            System.out.print(" " + (i + 1));
+        }
         for (int i = 0; i < enemyBoard.size(); i++) {
             System.out.println();
+            System.out.print((char) ('A' + i));
             for (int j = 0; j < enemyBoard.get(0).size(); j++) {
                 System.out.print(" " + enemyBoard.get(i).get(j));
             }
         }
     }
 
-    public void setShips(int rowNumber, int columnNumber, Ship type, String direction) {
+    public boolean setShips(String srowNumber, int columnNumber, String typeS, String direction) {
 
+        List<Ship> listOfShips = new ArrayList<>();
+        Carrier carrier = new Carrier();
+        Cruiser cruiser = new Cruiser();
+        Destroyer destroyer = new Destroyer();
+        Submarine submarine = new Submarine();
+        Battleship battleship = new Battleship();
+
+        listOfShips.add(carrier);
+        listOfShips.add(cruiser);
+        listOfShips.add(destroyer);
+        listOfShips.add(submarine);
+        listOfShips.add(battleship);
+
+
+        int shipNumber = 999;
+
+        if (typeS.equals("carrier")) {
+            shipNumber = 0;
+        }
+
+        if (typeS.equals("cruiser")) {
+            shipNumber = 1;
+        }
+
+        if (typeS.equals("destroyer")) {
+            shipNumber = 2;
+
+        }
+        if (typeS.equals("submarine")) {
+            shipNumber = 3;
+        }
+        if (typeS.equals("battleship")) {
+            shipNumber = 4;
+        }
+
+        int rowNumber = rowTranslater(srowNumber);
         rowNumber = rowNumber - 1;
         columnNumber = columnNumber - 1;
-        List<Integer> rowCoordinates = new ArrayList<>();
-        List<Integer> columnCoordinates = new ArrayList<>();
         boolean thrown = false;
 
 
         if (direction.equals("right")) {
             try {
-                for (int i = 0; i < type.getSize(); i++) {
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
 
-                    myBoard.get(rowNumber).get(columnNumber + i);
-                    if (myBoard.get(rowNumber).get(columnNumber + i) == "O") {
+                    this.myBoard.get(rowNumber).get(columnNumber + i);
+                    if (this.myBoard.get(rowNumber).get(columnNumber + i) == "O") {
                         thrown = true;
                     }
 
@@ -110,21 +210,22 @@ public abstract class Board {
 
 
             if (!thrown) {
-                for (int i = 0; i < type.getSize(); i++) {
-                    myBoard.get(rowNumber).set(columnNumber + i, "O");
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
+                    this.myBoard.get(rowNumber).set(columnNumber + i, "O");
                 }
             } else if (thrown) {
                 System.out.println("Choose an other coordinate.");
+                System.out.println(" ");
             }
         }
 
 
         if (direction.equals("left")) {
             try {
-                for (int i = 0; i < type.getSize(); i++) {
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
 
-                    myBoard.get(rowNumber).get(columnNumber - i);
-                    if (myBoard.get(rowNumber).get(columnNumber - i) == "O") {
+                    this.myBoard.get(rowNumber).get(columnNumber - i);
+                    if (this.myBoard.get(rowNumber).get(columnNumber - i) == "O") {
                         thrown = true;
                     }
 
@@ -135,20 +236,21 @@ public abstract class Board {
 
 
             if (!thrown) {
-                for (int i = 0; i < type.getSize(); i++) {
-                    myBoard.get(rowNumber).set(columnNumber - i, "O");
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
+                    this.myBoard.get(rowNumber).set(columnNumber - i, "O");
                 }
             } else if (thrown) {
+                System.out.println(" ");
                 System.out.println("Choose an other coordinate.");
             }
         }
 
         if (direction.equals("down")) {
             try {
-                for (int i = 0; i < type.getSize(); i++) {
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
 
-                    myBoard.get(rowNumber + i).get(columnNumber);
-                    if (myBoard.get(rowNumber + i).get(columnNumber) == "O") {
+                    this.myBoard.get(rowNumber + i).get(columnNumber);
+                    if (this.myBoard.get(rowNumber + i).get(columnNumber) == "O") {
                         thrown = true;
                     }
 
@@ -159,8 +261,8 @@ public abstract class Board {
 
 
             if (!thrown) {
-                for (int i = 0; i < type.getSize(); i++) {
-                    myBoard.get(rowNumber + i).set(columnNumber, "O");
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
+                    this.myBoard.get(rowNumber + i).set(columnNumber, "O");
                 }
             } else if (thrown) {
                 System.out.println("Choose an other coordinate.");
@@ -169,10 +271,10 @@ public abstract class Board {
 
         if (direction.equals("up")) {
             try {
-                for (int i = 0; i < type.getSize(); i++) {
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
 
-                    myBoard.get(rowNumber - i).get(columnNumber);
-                    if (myBoard.get(rowNumber - i).get(columnNumber) == "O") {
+                    this.myBoard.get(rowNumber - i).get(columnNumber);
+                    if (this.myBoard.get(rowNumber - i).get(columnNumber) == "O") {
                         thrown = true;
                     }
 
@@ -183,31 +285,19 @@ public abstract class Board {
 
 
             if (!thrown) {
-                for (int i = 0; i < type.getSize(); i++) {
-                    myBoard.get(rowNumber - i).set(columnNumber, "O");
+                for (int i = 0; i < listOfShips.get(shipNumber).getSize(); i++) {
+                    this.myBoard.get(rowNumber - i).set(columnNumber, "O");
                 }
             } else if (thrown) {
                 System.out.println("Choose an other coordinate.");
             }
         }
-
-
-//}
-//catch (IndexOutOfBoundsException ioobe) {
-//    System.out.println( "Please choose an other coordinate.");
-//    thrown = true;
-//}
-//
-//if (thrown) {
-//
-//
-//}
-
+        return thrown;
     }
 
 
     public List<List<String>> getMyBoard() {
-        return myBoard;
+        return this.myBoard;
     }
 
     public void setMyBoard(List<List<String>> myBoard) {
